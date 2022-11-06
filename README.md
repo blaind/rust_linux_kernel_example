@@ -2,11 +2,13 @@
 
 This example shows how to build a Rust Linux kernel module, and debug it using gdb.
 
+This should enable relatively rapid iteration when developing (e.g. edit module file, run `make run_kernel`, attach gdb with `make gdb`, repeat)
+
 ## Prequisites
 
 Build dependencies:
 
-    apt-get install make gcc cpio
+    sudo apt-get install make gcc cpio
 
 Fetch Rust-For-Linux:
 
@@ -29,7 +31,11 @@ This uses `kernel-config` as a baseline config
 
     make build_kernel
 
+This will take a while
+
 ## Running
+
+### 1. Init, build module & Start qemu
 
 Do-it-all-command, which
 
@@ -38,17 +44,21 @@ Do-it-all-command, which
 - creates initramfs
 - launches qemu
 
+(see Makefile for details)
+
 Run it:
 
     make run_kernel
 
-It should print a few lines, and be in idle mode.
+It should print a few lines, and be in idle mode. Leave it running
 
-Attach gdb to the emulator:
+### 2. Attach gdb to the qemu instance
+
+Open another terminal window, and attach gdb to the emulator:
 
     make gdb
 
-Now, you should see the kernel booting up and emulator eventually breaking in the rust module init
+Now, you should see the qemu-kernel booting up and emulator eventually breaking in the rust module init
 
 Emulator (run_kernel) should print:
 
@@ -66,9 +76,11 @@ gdb should print:
     21	        pr_info!("Rust minimal sample (init)\n");
     (gdb)
 
-# Troubleshooting
+## Troubleshooting
 
-## Finding module address
+### Finding module address
+
+Hopefully the module address stays the same (for symbols). If not, this may help (but please make a pull request for documenting a proper way to find the address)
 
 Look for the module kernel message:
 
