@@ -4,6 +4,8 @@
 #include <sys/syscall.h>
 #include <unistd.h>
 
+#define MODULE_PATH "/rust_sample_module.ko"
+
 int main()
 {
     printf("init - entered main()\n");
@@ -13,10 +15,10 @@ int main()
     {
         printf("init - loading kernel module (iteration=%d)\n", iteration);
 
-        int fd = open("/rust_minimal.ko", O_RDONLY);
+        int fd = open(MODULE_PATH, O_RDONLY);
         if (fd < 0)
         {
-            printf("init - can not find /rust_minimal.ko\n");
+            printf("init - can not find %s\n", MODULE_PATH);
             return 255;
         }
 
