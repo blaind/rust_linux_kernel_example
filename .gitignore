@@ -1,1 +1,4 @@
 init
+*.sw*
+ramdisk.img
+*.ko
