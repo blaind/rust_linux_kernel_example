@@ -4,13 +4,41 @@ This example shows how to build a Rust Linux kernel module, and debug it using g
 
 ## Prequisites
 
+Build dependencies:
+
     apt-get install make gcc cpio
+
+Fetch Rust-For-Linux:
+
+    git submodule update --init
+
+Rust-For-Linux prequisites, see [quick-start.rst](https://github.com/Rust-for-Linux/linux/blob/d9b2e84c0700782f26c9558a3eaacbe1f78c01e8/Documentation/rust/quick-start.rst). In brief (note! this overrides rustup config and installs specific version of bindgen)
+
+    cd linux
+    rustup override set $(scripts/min-tool-version.sh rustc)
+    rustup component add rust-src
+    cargo install --locked --version $(scripts/min-tool-version.sh bindgen) bindgen
+    make LLVM=1 rustavailable
+    # should print: "Rust is available!"
+
+For rust-analyzer support
+
+    cd linux
+    make LLVM=1 rust-analyzer
+
+## Building
+
+Build the kernel module
+
+This uses `kernel-config` as a baseline config
+
+    make build_kernel
 
 ## Running
 
 Do-it-all-command, which
 
-- builds the module
+- builds the module (`rust_minimal.rs`)
 - builds init-binary
 - creates initramfs
 - launches qemu
@@ -37,8 +65,22 @@ Emulator (run_kernel) should print:
 
 gdb should print:
 
-    Hardware assisted breakpoint 1 at 0xffffffffa000013f: file samples/rust/rust_minimal.rs, line 36.
+    Hardware assisted breakpoint 1 at 0xffffffffa0000474: file samples/rust/rust_minimal.rs, line 21.
 
-    Breakpoint 1, rust_minimal::{impl#1}::init (name=0xffffffffa0003000, module=0xffffffffa00035a8) at samples/rust/rust_minimal.rs:36
-    36	samples/rust/rust_minimal.rs: No such file or directory.
+    Breakpoint 1, rust_minimal::{impl#0}::init (_name=..., _module=<optimized out>) at samples/rust/rust_minimal.rs:21
+    21	        pr_info!("Rust minimal sample (init)\n");
     (gdb)
+
+# Troubleshooting
+
+## Finding module address
+
+Look for the module kernel message:
+
+    [    5.532793] kobject: 'rust_minimal' (ffffffffa0002090): kobject_release, parent ffff888000928250 (delayed 2000)
+
+Here the address is `0xffffffffa0002090`.
+
+TODO: why +0x2090 to base address `0xffffffffa0000000`?
+
+Update gdb.config `add-symbol-file` section with the base address.
