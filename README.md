@@ -21,11 +21,6 @@ Rust-For-Linux prequisites, see [quick-start.rst](https://github.com/Rust-for-Li
     make LLVM=1 rustavailable
     # should print: "Rust is available!"
 
-For rust-analyzer support
-
-    cd linux
-    make LLVM=1 rust-analyzer
-
 ## Building
 
 Build the kernel module
