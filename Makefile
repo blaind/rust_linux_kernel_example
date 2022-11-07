@@ -22,6 +22,10 @@ gdb:
 	gdb -x gdb.config
 
 # Build kernel initramfs
+# stub created with following (untested):
+# mkdir -p initramfs/{bin,dev,etc,home,mnt,proc,sys,usr}
+# cd initramfs/dev && sudo mknod console c 5 1
+# cd initramfs && mkdir usr/bin && busybox --install -s bin && cp /usr/bin/busybox usr/bin
 initramfs:
 	cp sample_module/${SOURCE_MODULE} ./initramfs/${MODULE_NAME}
 	cd initramfs && find . -print0 | cpio --null -ov --format=newc > ../ramdisk.img
