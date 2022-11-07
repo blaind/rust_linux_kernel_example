@@ -28,12 +28,12 @@ gdb:
 # Build kernel initramfs
 initramfs:
 	chmod +x init
-	cp linux/samples/rust/${SOURCE_MODULE} ./${MODULE_NAME}
+	cp sample_module/${SOURCE_MODULE} ./${MODULE_NAME}
 	ls init ${MODULE_NAME} |cpio -o --format=newc > ramdisk.img
 
 # Build the kernel_module
 kernel_module:
-	make -C linux LLVM=1 samples/rust/${SOURCE_MODULE}
+	make -C sample_module LLVM=1
 
 # Run the kernel
 run_kernel: prepare
