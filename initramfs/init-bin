@@ -1,0 +1,10 @@
+#!/bin/sh
+mount -t proc none /proc
+mount -t sysfs none /sys
+
+echo "========================= INSMOD rust_sample_module.ko ============================="
+insmod rust_sample_module.ko
+echo "========================= INSMOD DONE =============================================="
+
+exec /bin/sh -l
+

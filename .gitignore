@@ -2,3 +2,4 @@ init
 *.sw*
 ramdisk.img
 *.ko
+initramfs/*.ko

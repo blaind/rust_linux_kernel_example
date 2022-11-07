@@ -2,7 +2,7 @@
 
 This example shows how to build a Rust Linux kernel module, and debug it using gdb.
 
-This should enable relatively rapid iteration when developing (e.g. edit module file, run `make run_kernel`, attach gdb with `make gdb`, repeat)
+This should enable relatively rapid iteration when developing (e.g. edit module file, run `make debug_kernel`, attach gdb with `make gdb`, repeat)
 
 ## Prequisites
 
@@ -25,7 +25,7 @@ Rust-For-Linux prequisites, see [quick-start.rst](https://github.com/Rust-for-Li
 
 ## Building
 
-Build the kernel module
+Build the kernel module. Source located at `sample_module` path.
 
 This uses `kernel-config` as a baseline config
 
@@ -33,9 +33,7 @@ This uses `kernel-config` as a baseline config
 
 This will take a while
 
-## Running
-
-### 1. Init, build module & Start qemu
+## Running without gdb
 
 Do-it-all-command, which
 
@@ -50,6 +48,25 @@ Run it:
 
     make run_kernel
 
+This should open up a busybox shell, with the module already loaded.
+
+## Running with gdb
+
+### 1. Init, build module & Start qemu
+
+Do-it-all-command, which
+
+- builds the module (`rust_minimal.rs`)
+- builds init-binary
+- creates initramfs
+- launches qemu
+
+(see Makefile for details)
+
+Run it:
+
+    make debug_kernel
+
 It should print a few lines, and be in idle mode. Leave it running
 
 ### 2. Attach gdb to the qemu instance
@@ -60,7 +77,7 @@ Open another terminal window, and attach gdb to the emulator:
 
 Now, you should see the qemu-kernel booting up and emulator eventually breaking in the rust module init
 
-Emulator (run_kernel) should print:
+Emulator (debug_kernel) should print:
 
     ...
     [    1.210080] Run /init as init process
