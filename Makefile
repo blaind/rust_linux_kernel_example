@@ -15,11 +15,7 @@ build_kernel:
 
 # Cleanup
 clean:
-	rm -f init ${MODULE_NAME} ramdisk.img
-
-# Build init binary
-init: 
-	gcc -static init.c -o init
+	rm -f ${MODULE_NAME} ramdisk.img
 
 # Connect gdb to emulator
 gdb:
@@ -27,7 +23,6 @@ gdb:
 
 # Build kernel initramfs
 initramfs:
-	chmod +x init
 	cp sample_module/${SOURCE_MODULE} ./initramfs/${MODULE_NAME}
 	cd initramfs && find . -print0 | cpio --null -ov --format=newc > ../ramdisk.img
 
